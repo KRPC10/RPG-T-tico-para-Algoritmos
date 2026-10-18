@@ -1,0 +1,10 @@
+#coach{position:absolute;inset:0;z-index:60;display:none}
+#coach.on{display:block}
+#coach.dim{background:#05060acc}
+#coach .spot{position:absolute;border:2px solid var(--ye);border-radius:12px;box-shadow:0 0 0 9999px #05060acc,0 0 18px var(--ye);pointer-events:none;transition:all .25s}
+#coach .card{position:absolute;left:50%;transform:translateX(-50%);width:min(92%,520px);padding:16px 18px;border:2px solid var(--ye);border-radius:14px;background:#0b0d14;color:#e8f6ff;font:600 18px/1.45 var(--fd);box-shadow:0 0 24px #ffe66d55}
+#coach .txt b{color:var(--ye)}
+#coach .row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+#coach .step{font:400 12px var(--fm);color:#8aa}
+#coach .next{padding:9px 20px;border-radius:8px;background:var(--ye);color:#10131a;font:700 17px var(--fd);letter-spacing:.06em}
+#coach .skip{margin-right:10px;color:#8aa;font:400 13px var(--fm);text-decoration:underline}

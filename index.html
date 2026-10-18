@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0b0d14">
+<title>Algoritmia — Cyber RPG Tático</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/battle.css">
+<link rel="stylesheet" href="css/tutorial.css">
+</head><body>
+<main id="app">
+  <section id="screen-title" class="screen active">
+    <h1 class="logo">ALGORITMIA<small>cyber RPG tático</small></h1>
+    <nav class="menu">
+      <button class="pri" data-go="map">JOGAR</button>
+      <button id="btn-how">COMO JOGAR</button>
+      <button data-go="options">OPÇÕES</button>
+      <button data-go="credits">CRÉDITOS</button>
+    </nav>
+  </section>
+
+  <section id="screen-options" class="screen">
+    <h2 class="logo sm">OPÇÕES</h2>
+    <nav class="menu">
+      <button id="opt-name">NOME: ---</button>
+      <button id="opt-sound">SOM: LIGADO</button>
+      <button id="opt-reset">ZERAR PROGRESSO</button>
+      <button data-go="title">VOLTAR</button>
+    </nav>
+  </section>
+
+  <section id="screen-name" class="screen">
+    <h2 class="logo sm">SEU NOME</h2>
+    <p class="txt">Como você quer ser chamado?<br>Até 18 caracteres.</p>
+    <div class="namebox">
+      <input id="name-input" type="text" maxlength="18" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Digite seu nome" aria-label="Seu nome">
+      <small id="name-count">0/18</small>
+    </div>
+    <nav class="menu">
+      <button class="pri" id="name-ok">CONFIRMAR</button>
+      <button id="name-back">VOLTAR</button>
+    </nav>
+  </section>
+
+  <section id="screen-credits" class="screen">
+    <h2 class="logo sm">CRÉDITOS</h2>
+    <p class="txt">Reis RFV · Camacho KRP<br>Senai Porto — Cuiabá, MT</p>
+    <nav class="menu"><button data-go="title">VOLTAR</button></nav>
+  </section>
+
+  <section id="screen-map" class="screen">
+    <header class="hud"><span id="map-phase">FASE 1</span><span class="hbtn"><button class="mini" data-help>? AJUDA</button><button data-go="title" class="mini">‹ MENU</button></span></header>
+    <div class="mapwrap"><canvas id="map-canvas"></canvas></div>
+    <p class="hint">Toque no mapa (ou use as setas/WASD) para mover. Chegue até o inimigo para lutar.</p>
+  </section>
+
+  <section id="screen-battle" class="screen">
+    <div class="device">
+      <div class="bar-phase"><span>FASE <span id="b-phase">1</span></span><span class="hbtn"><button class="mini" data-help>? AJUDA</button><button class="mini" id="b-exit">‹ MAPA</button></span></div>
+      <div class="col-l">
+        <div class="crt">
+          <div class="hp hp-player"><b class="pname" id="player-name"></b><i id="php"></i><div class="bar"><u id="php-bar"></u></div><small>Rank Data Scout</small></div>
+          <div class="hp hp-boss"><b id="boss-name"></b><i id="bhp"></i><div class="bar"><u id="bhp-bar"></u></div><small id="boss-lvl"></small></div>
+          <div class="stage"><div class="spr player" id="player-spr" role="img" aria-label="Seu personagem"></div><div class="spr boss" id="boss-spr" role="img"></div></div>
+        </div>
+        <div class="term" id="term"><div class="intent" id="intent"></div><div class="tip" id="tip" hidden></div><div id="code"></div></div>
+      </div>
+      <div class="col-r">
+        <div class="keys" id="keys"></div>
+        <button class="exec" id="exec">EXECUTE SCRIPT</button>
+      </div>
+    </div>
+  </section>
+  <div id="toast"></div>
+  <div id="coach"><div class="spot"></div>
+    <div class="card"><div class="txt"></div>
+      <div class="row"><span class="step"></span><span><button class="skip">Pular tutorial</button> <button class="next">Próximo</button></span></div>
+    </div>
+  </div>
+</main>
+<script src="js/core.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/data/levels.js"></script>
+<script src="js/screens/map.js"></script>
+<script src="js/screens/battle.js"></script>
+<script src="js/tutorial.js"></script>
+<script src="js/main.js"></script>
+</body></html>
