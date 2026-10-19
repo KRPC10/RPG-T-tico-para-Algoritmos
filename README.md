@@ -11,6 +11,7 @@ css/menu.css          título, menus, HUD e mapa
 css/battle.css        tela de batalha (moldura, CRT, terminal, teclado)
 js/core.js            estado, save (localStorage), nome do jogador (cleanName), Game.show(), Game.toast()
 js/sprites.js         carrega os PNGs de assets/ (se faltar um, o mapa usa a arte provisória)
+js/engine/audio.js    sons 8-bit gerados por código (clique, golpe, erro, sucesso, corte, tique, alarme)
 js/data/levels.js     fases: mapa, teclado, chefe e desafios  <- EDITE AQUI para criar fases
 js/screens/map.js     mapa em canvas, toque → caminho (BFS), colisão
 js/screens/battle.js  tokens, validação, dano, fim de fase
@@ -67,9 +68,20 @@ Todos os PNGs são pixel art original, gerados por `tools/make_sprites.py` (prec
 python3 tools/make_sprites.py
 ```
 Para editar o desenho, mexa em `tools/art_player.py` (herói da batalha), `tools/art_bosses.py` (chefes e ícones do mapa) ou
-`tools/art_map.py` (herói do mapa e tiles) e rode o comando de novo. Para usar arte de outra pessoa, é só substituir os PNGs em `assets/`
+`tools/art_map.py` (herói do mapa e tiles) ou `tools/art_fx.py` (cortes) e rode o comando de novo. Para usar arte de outra pessoa, é só substituir os PNGs em `assets/`
 mantendo o tamanho e a ordem dos quadros (descritos em `js/sprites.js`).
 Chefe novo: desenhe `bossN.png` e `bossN-map.png`, inclua em `js/sprites.js` e coloque `sprite: 'bossN'` na fase em `levels.js`.
+
+## Fase de chefão (com tempo limite)
+A fase 3 (`ROOT-DAEMON`) tem `timer: 25` em `js/data/levels.js`: cada desafio tem esse tempo (ou o `time` do próprio desafio).
+Se a barra de tempo acabar, o chefe ataca (-25 de vida, 3 cortes) e o desafio recomeça. Errar o comando também faz o chefe revidar (-15, 2 cortes).
+Para fazer outro chefão: copie a fase 3, mude `boss` (nome, `sprite`, `hp`, `big: true` deixa o sprite maior) e os `challenges`.
+Fases sem `timer` (1 e 2) funcionam como antes. O relógio pausa com o tutorial aberto e para ao sair da batalha.
+
+## Efeitos e cortes (estilo Undertale)
+`js/screens/battle.js` chama `triggerImpact()` (tremor + flash), `spawnDamageText()` (número flutuante) e `spawnSlash()` (corte).
+Os cortes são folhas de 8 quadros (`assets/sprites/slash-hero.png` e `slash-boss.png`) tocadas por CSS (`.slash` em `css/battle.css`).
+Para mudar o desenho do corte: `tools/art_fx.py` e rode `python3 tools/make_sprites.py`.
 
 ## Tutorial
 `js/tutorial.js` mostra balões guiados na 1ª vez de cada tela (título, mapa, batalha). Para trocar textos, edite o objeto `T`. O botão "COMO JOGAR" (título) e "? AJUDA" (mapa/batalha) repetem o tutorial.

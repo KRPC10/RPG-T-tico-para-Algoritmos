@@ -1,72 +1,69 @@
 from pixlib import Cv
-from art_player import OUT, SK, SKS, HAIR, HAIRL, JK, JKL, JKD, JKDD, PANT, PANTD, SHOE, SHOED, SOLE, BELT, GOLD, GREEN, CY, STEEL, STEELD
+from art_player import (OUT, SK, SKS, SKL, HAIR, HAIRL, HAIR_HI, HAIRS, JK, JKL, JKD, JKDD, PANEL, PANELD,
+                        PANT, PANTD, PANTL, SHOE, SHOED, SOLE, SHIRT, BELT, GOLD, GREEN, CY, STEEL, STEELD, NEON, NEON_L, PINK)
 
 def _leg(c, x0, x1, mode, toe=None):
     top, shoe = {0: (12, 14), 'f': (11, 14), 'b': (11, 13)}[mode]
-    c.rect(x0, top, x1, shoe-1, PANT)
+    c.rect(x0, top, x1, shoe-1, PANT); c.rect(x0, top, x0, shoe-1, PANTD)
     c.rect(x0, shoe, x1, shoe, SHOE); c.rect(x0, shoe+1, x1, shoe+1, SOLE)
     if toe is not None: c.px(toe, shoe, SHOE); c.px(toe, shoe+1, SOLE)
+
+def _arms(c, f, dy, back=False):
+    la = 4 + (-1 if f == 1 else 1 if f == 3 else 0); ra = 4 + (1 if f == 1 else -1 if f == 3 else 0)
+    for x, n in ((3, la), (12, ra)):
+        c.rect(x, 8+dy, x, 8+dy+n-1, JKD); c.px(x, 9+dy, NEON); c.px(x, 8+dy+n-1, PANELD); c.px(x, 8+dy+n, SKS if x == 3 else SK)
 
 def hero_front(f):
     c = Cv(16, 16); st = f in (1, 3); dy = -1 if st else 0
     lm, rm = (('f','b') if f == 1 else ('b','f')) if st else (0, 0)
-    _leg(c, 5, 7, lm); _leg(c, 8, 10, rm)
-    la = 4 + (-1 if f == 1 else 1 if f == 3 else 0); ra = 4 + (1 if f == 1 else -1 if f == 3 else 0)
-    for x, n in ((3, la), (12, ra)):
-        c.rect(x, 8+dy, x, 8+dy+n-1, JKD); c.px(x, 8+dy+n, SK)
+    _leg(c, 5, 7, lm); _leg(c, 8, 10, rm); _arms(c, f, dy)
     c.rect(4, 8+dy, 11, 11+dy, JK); c.rect(4, 8+dy, 4, 11+dy, JKD); c.rect(11, 8+dy, 11, 11+dy, JKL)
-    c.rect(7, 8+dy, 8, 11+dy, JKD); c.px(9, 9+dy, GREEN); c.px(5, 10+dy, GREEN)
-    c.rect(4, 11+dy, 11, 11+dy, BELT); c.rect(7, 11+dy, 8, 11+dy, GOLD)
-    c.rect(5, 7+dy, 10, 7+dy, JKD)
-    c.rect(5, 4+dy, 10, 6+dy, SK); c.rect(5, 6+dy, 10, 6+dy, SKS)
-    c.px(6, 5+dy, BELT); c.px(9, 5+dy, BELT)
-    c.rect(4, 1+dy, 11, 3+dy, HAIR); c.rect(4, 4+dy, 4, 5+dy, HAIR); c.rect(11, 4+dy, 11, 5+dy, HAIR)
-    c.rect(5, 1+dy, 7, 1+dy, HAIRL); c.px(8, 0+dy, HAIR); c.px(6, 0+dy, HAIR)
-    c.rect(4, 3+dy, 11, 3+dy, BELT); c.rect(5, 3+dy, 6, 3+dy, GOLD); c.rect(9, 3+dy, 10, 3+dy, GOLD)
+    c.rect(7, 8+dy, 8, 11+dy, SHIRT); c.px(7, 9+dy, GOLD)                      # abertura da jaqueta + corrente
+    c.rect(4, 10+dy, 11, 10+dy, NEON); c.rect(4, 11+dy, 11, 11+dy, PANEL)      # faixa refletiva + barra cinza
+    c.rect(7, 10+dy, 8, 10+dy, NEON_L)
+    c.rect(6, 7+dy, 9, 7+dy, SKS)                                              # pescoço
+    c.rect(4, 6+dy, 5, 7+dy, JKD); c.rect(10, 6+dy, 11, 7+dy, JKL)             # gola alta
+    c.rect(5, 4+dy, 10, 6+dy, SK); c.rect(5, 6+dy, 6, 6+dy, SKS); c.px(8, 6+dy, '#a85f4a')
+    c.px(6, 5+dy, BELT); c.px(9, 5+dy, NEON); c.px(6, 4+dy, HAIR); c.px(9, 4+dy, HAIR)
+    c.rect(5, 1+dy, 10, 3+dy, HAIR); c.rect(4, 3+dy, 4, 5+dy, HAIRS); c.rect(11, 3+dy, 11, 5+dy, HAIRS)
+    c.rect(6, 1+dy, 9, 1+dy, HAIRL); c.px(9, 1+dy, HAIR_HI); c.px(7, 0+dy, HAIR); c.px(8, 0+dy, HAIR); c.px(6, 3+dy, HAIR); c.px(5, 4+dy, HAIR)
     c.outline(OUT); return c
 
 def hero_back(f):
     c = Cv(16, 16); st = f in (1, 3); dy = -1 if st else 0
     lm, rm = (('f','b') if f == 1 else ('b','f')) if st else (0, 0)
-    _leg(c, 5, 7, lm); _leg(c, 8, 10, rm)
-    la = 4 + (-1 if f == 1 else 1 if f == 3 else 0); ra = 4 + (1 if f == 1 else -1 if f == 3 else 0)
-    for x, n in ((3, la), (12, ra)):
-        c.rect(x, 8+dy, x, 8+dy+n-1, JKD); c.px(x, 8+dy+n, SK)
-    c.rect(4, 8+dy, 11, 11+dy, JKD); c.rect(4, 11+dy, 11, 11+dy, BELT)
-    c.rect(5, 8+dy, 10, 11+dy, STEEL); c.rect(5, 8+dy, 10, 8+dy, '#7b889f'); c.rect(5, 11+dy, 10, 11+dy, STEELD)
-    c.rect(7, 9+dy, 8, 10+dy, GREEN)
-    c.px(10, 6+dy, STEEL); c.px(11, 5+dy, STEEL); c.px(11, 4+dy, CY)
-    c.rect(5, 7+dy, 10, 7+dy, JKDD)
-    c.rect(4, 1+dy, 11, 6+dy, HAIR); c.rect(5, 6+dy, 10, 6+dy, '#1b2040'); c.rect(5, 1+dy, 8, 1+dy, HAIRL)
-    c.px(8, 0+dy, HAIR); c.px(6, 0+dy, HAIR)
-    c.rect(4, 3+dy, 11, 3+dy, BELT)
-    c.px(4, 5+dy, SKS); c.px(11, 5+dy, SKS)
+    _leg(c, 5, 7, lm); _leg(c, 8, 10, rm); _arms(c, f, dy)
+    c.rect(4, 8+dy, 11, 11+dy, JK); c.rect(4, 8+dy, 5, 11+dy, JKD); c.rect(10, 8+dy, 11, 11+dy, JKL)
+    c.rect(7, 7+dy, 8, 11+dy, NEON); c.px(7, 9+dy, NEON_L); c.px(8, 8+dy, NEON_L)  # implante na coluna
+    c.rect(4, 10+dy, 6, 10+dy, NEON); c.rect(9, 10+dy, 11, 10+dy, NEON); c.rect(4, 11+dy, 11, 11+dy, PANEL)
+    c.rect(4, 6+dy, 11, 7+dy, JKD); c.rect(5, 6+dy, 10, 6+dy, JK)              # gola alta (de trás)
+    c.rect(5, 1+dy, 10, 5+dy, HAIR); c.rect(4, 3+dy, 4, 5+dy, HAIRS); c.rect(11, 3+dy, 11, 5+dy, HAIRS)
+    c.rect(5, 5+dy, 10, 5+dy, HAIRS)                                          # nuca raspada
+    c.rect(6, 1+dy, 9, 1+dy, HAIRL); c.px(9, 2+dy, HAIR_HI); c.px(7, 0+dy, HAIR); c.px(8, 0+dy, HAIR)
+    c.px(4, 5+dy, SKS); c.px(11, 5+dy, SK)
     c.outline(OUT); return c
 
 def hero_left(f):
     c = Cv(16, 16); st = f in (1, 3); dy = -1 if st else 0
-    # pernas: f1 perna A à frente (esq.), f3 invertido
     if f == 0 or f == 2:
-        _leg(c, 6, 7, 0, toe=5); _leg(c, 8, 9, 0, toe=None)
+        _leg(c, 6, 7, 0, toe=5); _leg(c, 8, 9, 0)
     elif f == 1:
         _leg(c, 4, 5, 'f', toe=3); _leg(c, 9, 10, 'b')
     else:
         _leg(c, 9, 10, 'b'); _leg(c, 5, 6, 'f', toe=4)
-    # mochila (atrás = direita)
-    c.rect(10, 8+dy, 12, 11+dy, STEEL); c.rect(10, 8+dy, 12, 8+dy, '#7b889f'); c.rect(10, 11+dy, 12, 11+dy, STEELD); c.px(11, 10+dy, GREEN)
-    c.px(12, 6+dy, STEEL); c.px(12, 5+dy, CY); c.px(12, 7+dy, STEEL)
-    c.rect(5, 8+dy, 10, 11+dy, JK); c.rect(9, 8+dy, 10, 11+dy, JKD); c.rect(5, 8+dy, 5, 11+dy, JKL); c.px(6, 9+dy, GREEN)
-    c.rect(5, 11+dy, 10, 11+dy, BELT); c.rect(5, 11+dy, 5, 11+dy, GOLD)
-    c.rect(6, 7+dy, 10, 7+dy, JKD)
-    # braço
+    c.rect(5, 8+dy, 10, 11+dy, JK); c.rect(9, 8+dy, 10, 11+dy, JKD); c.rect(5, 8+dy, 5, 11+dy, JKL)
+    c.rect(10, 8+dy, 10, 11+dy, NEON)                                          # implante na borda das costas
+    c.px(10, 9+dy, NEON_L); c.px(10, 11+dy, NEON_L)
+    c.rect(5, 10+dy, 9, 10+dy, NEON); c.rect(5, 11+dy, 10, 11+dy, PANEL)
+    c.rect(6, 7+dy, 9, 7+dy, SKS)                                              # pescoço
+    c.rect(7, 6+dy, 10, 7+dy, JKD); c.rect(6, 6+dy, 6, 7+dy, JKL)              # gola alta
     ax = {0: 7, 2: 7, 1: 5, 3: 9}[f]
-    c.rect(ax, 8+dy, ax+1, 11+dy, JKDD if False else JKD); c.rect(ax, 8+dy, ax, 11+dy, JKL); c.px(ax, 12+dy, SK); c.px(ax+1, 12+dy, SKS)
-    # cabeça
-    c.rect(4, 4+dy, 9, 6+dy, SK); c.px(3, 5+dy, SK); c.rect(4, 6+dy, 9, 6+dy, SKS)
-    c.px(5, 5+dy, BELT); c.px(4, 6+dy, '#b4604f')
-    c.rect(5, 1+dy, 11, 3+dy, HAIR); c.rect(9, 4+dy, 11, 6+dy, HAIR); c.rect(5, 1+dy, 7, 1+dy, HAIRL)
-    c.px(8, 0+dy, HAIR); c.px(6, 0+dy, HAIR); c.px(5, 4+dy, HAIR); c.px(6, 4+dy, HAIR)
-    c.rect(5, 3+dy, 11, 3+dy, BELT); c.rect(4, 3+dy, 5, 3+dy, GOLD)
+    c.rect(ax, 8+dy, ax+1, 11+dy, JKD); c.rect(ax, 8+dy, ax, 11+dy, JKL); c.px(ax, 9+dy, NEON); c.px(ax, 11+dy, PANELD)
+    c.px(ax, 12+dy, SK); c.px(ax+1, 12+dy, SKS)
+    c.rect(4, 4+dy, 9, 6+dy, SK); c.px(3, 5+dy, SK); c.rect(4, 6+dy, 9, 6+dy, SKS); c.px(4, 6+dy, '#8a4a3e')
+    c.px(5, 5+dy, NEON); c.px(5, 4+dy, HAIR); c.px(8, 6+dy, NEON)               # olho de implante, sobrancelha, brinco
+    c.rect(6, 1+dy, 11, 3+dy, HAIR); c.rect(8, 4+dy, 11, 6+dy, HAIRS); c.rect(4, 3+dy, 6, 3+dy, HAIR)
+    c.rect(6, 1+dy, 9, 1+dy, HAIRL); c.px(7, 1+dy, HAIR_HI); c.px(9, 0+dy, HAIR); c.px(8, 0+dy, HAIR); c.px(5, 4+dy, HAIR)
     c.outline(OUT); return c
 
 def hero_sheet():

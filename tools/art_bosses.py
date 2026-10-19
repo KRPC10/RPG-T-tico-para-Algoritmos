@@ -120,3 +120,63 @@ def map_warden(frame):
     c.rect(4,14,6,15,'#333c50'); c.rect(9,14,11,15,'#333c50')
     c.outline('#05070d')
     return c
+
+
+def boss_daemon():
+    """ROOT-DAEMON (chefão da fase 3), 64x64, de frente, simétrico."""
+    c = Cv(64, 64)
+    ROBE='#2a0f1f'; ROBEL='#4a1830'; ROBED='#170710'; TRIM='#d63048'; TRIML='#ff6b7a'
+    BONE='#e9e1f2'; BONED='#a79bb8'; GLOW='#ff8a3d'; GLOWL='#fff1c0'; VOID='#06020a'; CYAN='#3ee8ff'
+    # mãos flutuantes com garras e orbes de dados
+    for x in (7, 56):
+        c.ell(x, 36, 4.2, 4.2, ROBE); c.ell(x, 35, 2.4, 2.4, TRIM)
+    # manto: grande, rasgado embaixo
+    c.poly([(32,24),(22,24),(14,36),(9,54),(15,51),(18,60),(24,55),(28,63),(32,57)], ROBE, sym=True)
+    c.poly([(32,26),(24,26),(18,37),(15,52),(20,49),(22,58),(27,53),(32,58)], ROBEL, sym=True)
+    c.poly([(32,28),(28,28),(26,40),(25,56),(29,52),(32,57)], ROBED, sym=True)
+    c.line(32,28,32,57,TRIM)                                   # costura central
+    c.line(21,40,16,52,TRIM,sym=True); c.line(22,26,15,37,TRIML,sym=True)
+    # mangas largas e braços
+    c.poly([(23,27),(16,29),(8,36),(6,45),(11,44),(16,38),(22,34)], ROBE, sym=True)
+    c.poly([(22,28),(16,31),(10,37),(9,42),(13,40),(18,35)], ROBEL, sym=True)
+    c.line(6,45,11,44,TRIM,sym=True)
+    # ombreiras de osso
+    c.poly([(23,24),(15,22),(11,16),(18,19),(24,21)], BONE, sym=True); c.line(11,16,17,19,BONED,sym=True)
+    # núcleo no peito
+    c.poly([(32,31),(27,37),(32,43),(37,37)], GLOW); c.poly([(32,33),(29,37),(32,41),(35,37)], GLOWL)
+    c.rect(22,45,41,46,ROBED); c.rect(30,44,33,47,'#ffe66d'); c.rect(31,45,32,46,ROBED)
+    # barras de "código" no peito
+    for i, h in enumerate([2,4,3,5]):
+        c.rect(23+i*2, 44-h, 23+i*2, 43, CYAN, sym=True)
+    # capuz
+    c.ell(32, 17, 12, 13, ROBE); c.ell(32, 18, 10.5, 11.5, ROBEL)
+    c.poly([(22,10),(32,2),(42,10),(38,5),(32,3),(26,5)], ROBE)
+    c.line(21,12,27,5,TRIM,sym=True); c.line(27,5,32,3,TRIML,sym=True)
+    # chifres curvos
+    c.poly([(23,10),(17,7),(13,2),(11,0),(16,2),(19,5),(25,8)], BONE, sym=True)
+    c.poly([(23,10),(19,8),(15,3),(18,5),(22,8)], BONED, sym=True)
+    # rosto-vazio
+    c.ell(32, 19, 8, 9, VOID)
+    # olhos brilhantes
+    c.poly([(25,16),(30,17),(30,20),(26,19)], GLOW, sym=True); c.poly([(27,17),(30,18),(30,19),(27,18.5)], GLOWL, sym=True)
+    # sorriso de dentes
+    c.rect(26,24,37,24,GLOW)
+    for x in range(26,38,2): c.rect(x,25,x,26,GLOW)
+    c.rect(27,23,36,23,'#7a2a10')
+    c.outline('#05020a')
+    # janelas/bits flutuando em volta
+    for (x,y,col) in [(4,10,CYAN),(8,4,'#50fa7b'),(57,6,CYAN),(60,14,'#50fa7b'),(3,26,'#50fa7b'),(60,24,CYAN),(10,58,CYAN),(53,58,'#50fa7b')]:
+        c.rect(x,y,x+1,y+1,col)
+    return c
+
+def map_daemon(frame):
+    c = Cv(16, 16); b = 0 if frame == 0 else -1
+    c.poly([(8,6+b),(3,8+b),(2,14+b),(5,12+b),(8,15+b),(11,12+b),(14,14+b),(13,8+b)], '#2a0f1f')
+    c.poly([(8,8+b),(5,10+b),(5,13+b),(8,14+b),(11,13+b),(11,10+b)], '#4a1830')
+    c.rect(4,2+b,11,7+b,'#2a0f1f'); c.rect(5,3+b,10,7+b,'#06020a')
+    c.px(6,5+b,'#ff8a3d'); c.px(9,5+b,'#ff8a3d' if frame == 0 else '#fff1c0'); c.px(7,5+b,'#ff8a3d'); c.px(8,5+b,'#ff8a3d')
+    c.px(7,7+b,'#ff8a3d'); c.px(9,7+b,'#ff8a3d')
+    c.px(3,2+b,'#e9e1f2'); c.px(2,1+b,'#e9e1f2'); c.px(12,2+b,'#e9e1f2'); c.px(13,1+b,'#e9e1f2')
+    c.px(8,10+b,'#ff8a3d'); c.px(8,11+b,'#fff1c0')
+    c.outline('#05020a')
+    return c

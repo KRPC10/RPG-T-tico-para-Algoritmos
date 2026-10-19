@@ -46,7 +46,7 @@
 
   <section id="screen-credits" class="screen">
     <h2 class="logo sm">CRÉDITOS</h2>
-    <p class="txt">Reis RFV · Camacho KRP<br>Senai Porto — Cuiabá, MT</p>
+    <p class="txt">Rafael Reis · Kenzo Camacho<br>Senai Porto — Cuiabá, MT</p>
     <nav class="menu"><button data-go="title">VOLTAR</button></nav>
   </section>
 
@@ -58,7 +58,7 @@
 
   <section id="screen-battle" class="screen">
     <div class="device">
-      <div class="bar-phase"><span>FASE <span id="b-phase">1</span></span><span class="hbtn"><button class="mini" data-help>? AJUDA</button><button class="mini" id="b-exit">‹ MAPA</button></span></div>
+      <div class="bar-phase"><span>FASE <span id="b-phase">1</span></span><div class="timer" id="timer" hidden><u id="timer-bar"></u><i id="timer-txt"></i></div><span class="hbtn"><button class="mini" data-help>? AJUDA</button><button class="mini" id="b-exit">‹ MAPA</button></span></div>
       <div class="col-l">
         <div class="crt">
           <div class="hp hp-player"><b class="pname" id="player-name"></b><i id="php"></i><div class="bar"><u id="php-bar"></u></div><small>Rank Data Scout</small></div>
@@ -84,6 +84,7 @@
 <script src="js/sprites.js"></script>
 <script src="js/data/levels.js"></script>
 <script src="js/screens/map.js"></script>
+<script src="js/engine/audio.js"></script>
 <script src="js/screens/battle.js"></script>
 <script src="js/tutorial.js"></script>
 <script src="js/main.js"></script>

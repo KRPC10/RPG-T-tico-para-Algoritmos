@@ -23,6 +23,10 @@
       { t: 'Está difícil? Calma! Quando a sua vida ficar <b>abaixo da metade</b>, aparece uma <b>dica amarela</b> para te ajudar. Boa sorte! 🎮' } ]
   };
 
+  T.timer = [
+    { t: '⚠ <b>CHEFÃO!</b> Este inimigo é mais difícil: você tem <b>tempo limite</b> para montar cada comando.' },
+    { el: '#timer', t: 'Esta barra mostra o <b>tempo que resta</b>. Se ela acabar, o chefe <b>ataca</b> e você perde vida. A cada novo desafio ela enche de novo.' } ];
+
   let list, i, name;
   function show() {
     const s = list[i], app = $('#app').getBoundingClientRect();
@@ -44,6 +48,7 @@
 
   nxt.onclick = () => { ++i < list.length ? show() : close(); };
   skp.onclick = () => { Object.keys(T).forEach(k => G.state.seen[k] = true); close(); };
+  G.tutorialRun = run; // usado pelo chefão (battle.js)
   G.onShow = n => { if (T[n] && !G.state.seen[n]) setTimeout(() => { if (G.current === n) run(n); }, 350); };
   document.addEventListener('click', e => {
     if (e.target.closest('#btn-how')) { G.state.seen = {}; G.save(); run('title'); }
