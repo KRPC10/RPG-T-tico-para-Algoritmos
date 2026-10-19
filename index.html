@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/menu.css">
 <link rel="stylesheet" href="css/battle.css">
+<link rel="stylesheet" href="css/dialogue.css">
 <link rel="stylesheet" href="css/tutorial.css">
 </head><body>
 <main id="app">
@@ -53,7 +54,14 @@
   <section id="screen-map" class="screen">
     <header class="hud"><span id="map-phase">FASE 1</span><span class="hbtn"><button class="mini" data-help>? AJUDA</button><button data-go="title" class="mini">‹ MENU</button></span></header>
     <div class="mapwrap"><canvas id="map-canvas"></canvas></div>
-    <p class="hint">Toque no mapa (ou use as setas/WASD) para mover. Chegue até o inimigo para lutar.</p>
+    <p class="hint">Toque no mapa (ou use as setas/WASD) para mover. Chegue até o inimigo para lutar. Toque no Mentor para conversar.</p>
+    <div id="dialogue" role="dialog" aria-label="Conversa com o Mentor">
+      <div class="dlg-box">
+        <div class="dlg-avatar" aria-hidden="true"></div>
+        <div class="dlg-main"><div class="dlg-name"></div><p class="dlg-text" title="Toque para pular a digitação"></p></div>
+        <div class="dlg-options"></div>
+      </div>
+    </div>
   </section>
 
   <section id="screen-battle" class="screen">
@@ -85,6 +93,8 @@
 <script src="js/data/levels.js"></script>
 <script src="js/screens/map.js"></script>
 <script src="js/engine/audio.js"></script>
+<script src="js/data/dialogues.js"></script>
+<script src="js/components/dialogue.js"></script>
 <script src="js/screens/battle.js"></script>
 <script src="js/tutorial.js"></script>
 <script src="js/main.js"></script>

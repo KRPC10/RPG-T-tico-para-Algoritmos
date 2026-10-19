@@ -1,14 +1,16 @@
 // Mapa top-down em canvas: toque → caminho (BFS) → personagem anda tile a tile.
 (function (G) {
   const cv = document.getElementById('map-canvas'), cx = cv.getContext('2d');
-  let L, g, T, p, back, en, path = [], raf, last = 0, cols, rows, dir = 0; // dir: 0 baixo · 1 esquerda · 2 direita · 3 cima
+  let L, g, T, p, back, en, npc = null, wantTalk = false, path = [], raf, last = 0, cols, rows, dir = 0; // dir: 0 baixo · 1 esquerda · 2 direita · 3 cima
   const STEP = 130; // ms por tile
-  const solid = c => c === '#' || c === 'T';
+  const solid = c => c === '#' || c === 'T' || c === 'N'; // N = NPC (bloqueia o caminho)
 
   G.map = { start(i) {
     L = G.levels[i]; g = L.map.map(r => [...r]); rows = g.length; cols = g[0].length; path = []; en = null; dir = 0;
     g.forEach((r, y) => r.forEach((c, x) => { if (c === 'P') { p = { x, y }; g[y][x] = '.'; } if (c === 'E') { en = { x, y }; g[y][x] = '.'; } }));
     back = p;
+    if (typeof DialogueSystem !== 'undefined' && DialogueSystem.active) DialogueSystem.close();
+    npc = L.npc ? { ...L.npc } : null; wantTalk = false; if (npc) g[npc.y][npc.x] = 'N';
     document.getElementById('map-phase').textContent = 'FASE ' + L.id;
     G.show('map'); fit(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
   } };
@@ -22,16 +24,29 @@
   };
 
   addEventListener('keydown', e => {
-    if (G.current !== 'map') return;
+    if (G.current !== 'map' || talking()) return;
     if (e.key === 'Escape') return G.show('title');
+    if ((e.key === 'Enter' || e.key === ' ' || e.key === 'e') && near()) { e.preventDefault(); return talk(); }
     const d = { ArrowUp:[0,-1], w:[0,-1], ArrowDown:[0,1], s:[0,1], ArrowLeft:[-1,0], a:[-1,0], ArrowRight:[1,0], d:[1,0] }[e.key];
     if (!d || path.length) return;
     const n = { x: p.x + d[0], y: p.y + d[1] };
+    if (npc && n.x === npc.x && n.y === npc.y) { e.preventDefault(); return talk(); } // andar contra o NPC = conversar
     if (g[n.y] && !solid(g[n.y][n.x] || '#')) path = [n];
     e.preventDefault();
   });
 
   const face = (a, b) => { dir = b.y > a.y ? 0 : b.y < a.y ? 3 : b.x < a.x ? 1 : 2; };
+
+  // --- NPC / diálogo ---
+  const talking = () => typeof DialogueSystem !== 'undefined' && DialogueSystem.active;
+  const near = () => !!npc && Math.abs(p.x - npc.x) + Math.abs(p.y - npc.y) === 1; // jogador num tile vizinho ao NPC
+  function talk() {
+    if (!npc) return;
+    if (near()) { path = []; wantTalk = false; face(p, npc); return DialogueSystem.open(npc.id); }
+    let best = null; // longe: anda até o tile livre mais próximo ao lado do NPC e conversa ao chegar
+    for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const q = bfs(p, { x: npc.x + dx, y: npc.y + dy }); if (q.length && (!best || q.length < best.length)) best = q; }
+    if (best) { path = best; wantTalk = true; }
+  }
   const floorIdx = (x, y) => (x * 7 + y * 13 + x * y) % 11 === 0 ? 2 : (x + y) % 2; // 2 = chão com circuito (raro)
 
   function fit() {
@@ -59,8 +74,10 @@
   }
 
   cv.addEventListener('pointerdown', e => {
-    const r = cv.getBoundingClientRect();
-    path = bfs(p, { x: Math.floor((e.clientX - r.left) / r.width * cols), y: Math.floor((e.clientY - r.top) / r.height * rows) });
+    if (talking()) return;
+    const r = cv.getBoundingClientRect(), tx = Math.floor((e.clientX - r.left) / r.width * cols), ty = Math.floor((e.clientY - r.top) / r.height * rows);
+    if (npc && tx === npc.x && ty === npc.y) return talk();   // toque no NPC = conversar
+    wantTalk = false; path = bfs(p, { x: tx, y: ty });
   });
 
   function loop(t) {
@@ -68,6 +85,7 @@
     if (path.length && t - last > STEP) {
       last = t; back = p; p = path.shift(); face(back, p);
       if (en && p.x === en.x && p.y === en.y) { path = []; return G.battle.start(L); }
+      if (wantTalk && !path.length) { wantTalk = false; if (near()) talk(); }
     }
     draw(t); raf = requestAnimationFrame(loop);
   }
@@ -79,7 +97,7 @@
     for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
       const c = g[y][x], px = x * T, py = y * T;
       if (G.hasSprite('tiles')) { cx.drawImage(S.tiles, (c === '#' ? 3 : c === 'T' ? 4 : floorIdx(x, y)) * 16, 0, 16, 16, px, py, T, T); continue; }
-      if (solid(c)) {
+      if (c === '#' || c === 'T') {
         cx.fillStyle = c === '#' ? '#1c2442' : '#0f3a4a'; cx.fillRect(px, py, T, T);
         cx.fillStyle = c === '#' ? '#3ee8ff55' : '#4dff88'; cx.fillRect(px, py, T, Math.max(2, T / 8));
         if (c === 'T') { cx.fillStyle = '#4dff88'; cx.fillRect(px + T * .25, py + T * .35, T * .5, T * .3); }
@@ -98,6 +116,14 @@
         const b = Math.sin(t / 200) * T * .04, mx = ex + T / 2, my = ey + T / 2 + b;
         cx.fillStyle = '#ff4fd8'; cx.beginPath(); cx.moveTo(mx, my - T * .4); cx.lineTo(mx + T * .35, my); cx.lineTo(mx, my + T * .4); cx.lineTo(mx - T * .35, my); cx.fill();
       }
+    }
+
+    // NPC: sprite 16x16 + "!" amarelo chamando o jogador até a 1ª conversa
+    if (npc && typeof DialogueSystem !== 'undefined') {
+      const nx = npc.x * T, ny = npc.y * T, a = DialogueSystem.art(npc.id);
+      shadow(nx, ny, 'rgba(0,0,0,.4)');
+      if (a) cx.drawImage(a, 0, 0, 16, 16, nx, Math.round(ny + Math.sin(t / 300) * T * .03), T, T);
+      if (!G.state.met) { cx.fillStyle = '#ffe66d'; cx.font = '700 ' + Math.round(T * .55) + 'px sans-serif'; cx.textAlign = 'center'; cx.fillText('!', nx + T / 2, ny - T * .02 + Math.sin(t / 180) * T * .05); }
     }
 
     // Jogador: desliza entre tiles, anda com 4 quadros e vira para a direção do movimento

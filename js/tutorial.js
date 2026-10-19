@@ -10,7 +10,7 @@
       { t: 'Bem-vindo ao <b>ALGORITMIA</b>! 👋 Aqui você aprende a pensar como um programador <b>jogando</b>. Em vez de digitar código, você monta o comando <b>tocando em botões</b>.' },
       { el: '.menu .pri', t: 'Toque em <b>JOGAR</b> para começar. Se esquecer algo, use o botão <b>? AJUDA</b> no topo de cada tela.' } ],
     map: [
-      { el: () => G.map.rect('me'), t: 'Este é <b>você</b>: o personagem de jaqueta azul e tênis rosa.' },
+      { el: () => G.map.rect('me'), t: 'Este é <b>você</b>: o personagem de jaqueta amarela e calça preta.' },
       { el: '#map-canvas', t: 'Toque em qualquer ponto do <b>chão escuro</b> e ele anda até lá. As paredes azuis bloqueiam o caminho. (No computador, use as setas do teclado.)' },
       { el: () => G.map.rect('enemy'), t: 'Seu objetivo é chegar neste <b>inimigo</b>, que brilha em rosa. Quando você encostar nele, começa a batalha.' } ],
     battle: [

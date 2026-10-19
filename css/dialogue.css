@@ -1,0 +1,19 @@
+/* Caixa de diálogo (NPC): overlay na parte inferior da tela do mapa, 9:16 primeiro. */
+#dialogue{display:none;position:absolute;left:0;right:0;bottom:0;z-index:40;padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
+#dialogue.on{display:block;animation:dlgUp .2s ease-out}
+@keyframes dlgUp{from{transform:translateY(22px);opacity:0}}
+.dlg-box{display:grid;grid-template-columns:64px 1fr;gap:10px 12px;max-width:720px;margin:0 auto;padding:12px;border:3px solid var(--cy);border-radius:10px;
+  background:linear-gradient(#0d1426f5,#080b16f5);box-shadow:0 0 0 2px #05060a,0 0 18px #3ee8ff55,inset 0 0 18px #3ee8ff1a}
+.dlg-avatar{width:64px;height:64px;border:2px solid var(--pu);border-radius:8px;background:#0a0d14 center/contain no-repeat;image-rendering:pixelated;box-shadow:inset 0 0 12px #000}
+.dlg-name{margin-bottom:4px;font:700 14px var(--fd);letter-spacing:.2em;color:var(--ye)}
+.dlg-text{min-height:5.6em;max-height:9em;overflow:auto;font:500 13px/1.55 var(--fm);color:#e8f6ff;cursor:pointer}
+.dlg-text.typing::after{content:"▮";margin-left:2px;color:var(--pk);animation:dlgBlink 1s steps(2) infinite}
+@keyframes dlgBlink{50%{opacity:0}}
+.dlg-options{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dlg-options button{min-height:44px;padding:8px 10px;border:2px solid var(--pu);border-radius:6px;background:#12142a;color:#e8f6ff;font:600 12px var(--fm);text-align:left}
+.dlg-options button::before{content:"▸ ";color:var(--pk)}
+.dlg-options button:active,.dlg-options button.sel{border-color:var(--cy);background:#12304a}
+.dlg-options button.end{border-color:var(--rd);color:#ffb4bd}
+.dlg-options.lock button{pointer-events:none;opacity:.55}
+@media (min-width:900px) and (min-height:520px){.dlg-box{grid-template-columns:96px 1fr}.dlg-avatar{width:96px;height:96px}.dlg-text{font-size:16px}.dlg-options button{font-size:14px}}
+@media (prefers-reduced-motion:reduce){#dialogue.on{animation:none}.dlg-text.typing::after{animation:none}}
