@@ -17,6 +17,12 @@
           text: 'IF quer dizer SE: o computador só age se a condição for verdadeira. SE a vida for menor que 10, curar. ELSE é o SENÃO: o que fazer quando a condição é falsa.' },
         { id: 'while', label: 'Repetição (WHILE)',
           text: 'WHILE quer dizer ENQUANTO: repete uma ação enquanto a condição for verdadeira. ENQUANTO a porta estiver trancada, tentar abrir. Cuidado: se a condição nunca mudar, repete para sempre!' },
+        { id: 'else',  label: 'ELSE e BREAK',
+          text: 'ELSE é o plano B: SE estiver chovendo, levo guarda-chuva; SENÃO, levo boné. BREAK é o freio: ele sai da repetição na hora, mesmo que a condição ainda seja verdadeira.' },
+        { id: 'loop',  label: 'Laço infinito',
+          text: 'Laço infinito é uma torneira que ninguém fecha: o WHILE repete enquanto a condição for verdadeira. Se a ação não muda nada, ele nunca para. Solução: uma ação que mude a variável, ou um BREAK.' },
+        { id: 'blocos', label: 'Como montar o código',
+          text: 'Leia a missão e toque nos blocos na ordem da frase. Só acendem os blocos que podem vir agora, e os espaços tracejados mostram o que falta. Antes do golpe, você vê o código rodando passo a passo.' },
         { id: 'end',   label: 'Encerrar', end: true,
           text: 'Boa sorte, {nome}! Se tiver dúvida, volte a falar comigo.' }
       ]

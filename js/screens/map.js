@@ -131,9 +131,10 @@
     const fx = back ? back.x + (p.x - back.x) * prog : p.x, fy = back ? back.y + (p.y - back.y) * prog : p.y;
     const bob = walking ? 0 : Math.sin(t / 200) * T * .03;
     const hx = Math.round(fx * T), hy = Math.round(fy * T + bob);
+    const hk = 'hero' + (G.avatar ? G.avatar().suf : ''), heroImg = G.hasSprite(hk) ? S[hk] : S.hero; // avatar escolhido na tela de acesso
     if (G.hasSprite('hero')) {
       shadow(hx, Math.round(fy * T), 'rgba(0,0,0,.4)');
-      cx.drawImage(S.hero, (walking ? Math.floor(t / STEP) % 4 : 0) * 16, dir * 16, 16, 16, hx, hy, T, T);
+      cx.drawImage(heroImg, (walking ? Math.floor(t / STEP) % 4 : 0) * 16, dir * 16, 16, 16, hx, hy, T, T);
     } else {
       const x = hx, y = hy;
       cx.fillStyle = '#ffd7b0'; cx.fillRect(x + T * .3, y + T * .12, T * .4, T * .3);

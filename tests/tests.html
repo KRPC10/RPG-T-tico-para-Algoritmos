@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Testes — Algoritmia</title>
+<style>body{background:#0b0d14;color:#e8f6ff;font:14px/1.6 ui-monospace,monospace;padding:20px}h1{font-size:18px}.ok{color:#4dff88}.no{color:#ff4d5e}</style>
+</head><body><h1>Testes da mini-linguagem</h1><div id="out"></div>
+<script src="../js/lang/algo.js"></script><script src="lang.test.js"></script>
+<script>
+  const o = document.getElementById('out'), T = window.TESTES;
+  o.innerHTML = T.resultados.map(r => `<div class="${r.ok ? 'ok' : 'no'}">${r.ok ? '✔' : '✘'} ${r.nome}${r.ok ? '' : ' → ' + r.erro}</div>`).join('') +
+    `<h1 class="${T.passou === T.total ? 'ok' : 'no'}">${T.passou} de ${T.total} testes passaram</h1>`;
+</script></body></html>

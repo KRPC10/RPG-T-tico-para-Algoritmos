@@ -1,0 +1,6 @@
+/* Fontes locais (funcionam sem internet). Licença SIL Open Font License — ver assets/fonts/OFL-*.txt */
+@font-face{font-family:'Rajdhani';font-weight:600;font-display:swap;src:url(../assets/fonts/rajdhani-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Rajdhani';font-weight:700;font-display:swap;src:url(../assets/fonts/rajdhani-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-weight:400 500;font-display:swap;src:url(../assets/fonts/jetbrains-mono-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-weight:600;font-display:swap;src:url(../assets/fonts/jetbrains-mono-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-weight:700 900;font-display:swap;src:url(../assets/fonts/jetbrains-mono-latin-700-normal.woff2) format('woff2')}

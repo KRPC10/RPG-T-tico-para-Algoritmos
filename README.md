@@ -1,87 +1,76 @@
-# Algoritmia — Cyber RPG Tático (protótipo web)
+# Algoritmia — Cyber RPG Tático (v2)
 
-Jogo web mobile-first: tela inicial → mapa top-down (toque para andar) → batalha com teclado de tokens.
-Sem framework e sem build: HTML + CSS + JS puro, abre direto no navegador.
+Jogo web mobile-first para aprender **lógica de programação montando código com blocos**, sem digitar.
+Equipe **TRACER TECH** — Kenzo Raul Pimenta Camacho e Rafael Filipe Vieira Reis — Senai Porto, Cuiabá/MT.
+Festival High Tech MT 2026 · Robótica — Inovação Tecnológica.
+
+HTML + CSS + JS puro: sem framework, sem build. Abre com duplo clique no `index.html` e, publicado em HTTPS, **funciona sem internet** (PWA).
+
+## O que há de novo na v2
+
+| Recurso | Onde | Por que importa |
+|---|---|---|
+| **Teclado guiado pela gramática**: só acendem os blocos que podem vir agora | `js/lang/algo.js` → `estado()` | Erro de sintaxe é **impossível de verdade** (o que o projeto escrito promete) |
+| **Espaços tracejados** mostram o que falta (DADO, COMPARAR, AÇÃO) | `battle.js` → `render()` | O iniciante vê a estrutura do comando sem ler regra |
+| **Interpretador de verdade**: o código é executado sobre as variáveis | `algo.js` → `executar()` / `validar()` | Qualquer resposta logicamente certa é aceita (ex.: lados da comparação trocados); "chute" é recusado |
+| **Execução passo a passo** antes do golpe (`3 == 3 → VERDADEIRO`) | `battle.js` | Liga código → consequência |
+| **Erro explicado** com o cenário que falhou; o código continua montado | `algo.js` → `explicar()` | Feedback pedagógico, sem punir apagando tudo |
+| **WHILE vira COMBO**; **laço infinito** detectado e explicado | `algo.js` (limite de 12 repetições) | Mostra a repetição acontecendo |
+| **Tradução ao vivo**: Português · Python · JavaScript | `algo.js` → `traduzir()` | Cumpre o 3º objetivo específico (linguagens de mercado) |
+| **Dica em 3 níveis** (o 3º pisca o próximo bloco certo) | `battle.js` | Ninguém fica travado |
+| **Tela de resultado** com estrelas e o código final em Python | `#screen-result` | Fechamento de cada fase |
+| **Relatório** com Mapa de Habilidades (Condicional, Laços, Eficiência) e métricas **reais** + CSV | `js/metrics/logger.js`, `js/screens/report.js` | Evidência para a banca e para o professor |
+| **Teste de Digitação** (teclado do celular × blocos), ordem alternada, com **n** | `js/screens/bench.js` | Gera dados reais para o Quadro 1 do projeto |
+| **Modo Banca**: `?banca=1` ou 5 toques no logo | `js/main.js` | Escolher fase direto + "Reiniciar demo" entre jurados |
+| **Modo Acolhimento** (sem cronômetro, metade do dano) e **Efeitos leves** | Opções | Inclusão e celulares simples |
+| **Offline**: service worker + fontes locais | `sw.js`, `manifest.webmanifest`, `assets/fonts/` | O Wi-Fi do evento não derruba a demo |
+| **Testes automatizados** da linguagem (28 testes) | `tests/` | Qualidade técnica comprovável |
+| **Tela de acesso cyberpunk**: cidade neon animada, boot de terminal, codinome e 4 avatares (cor da jaqueta) | `css/login.css`, `js/ui/city.js`, `js/main.js` | Entrada imersiva, sem senha e offline |
+| **Treinamento animado**: uma mão toca nos blocos de verdade com legenda passo a passo (inclui um erro corrigido), depois prática guiada com o bloco certo piscando | `js/screens/training.js`, `css/training.css` | Qualquer iniciante entende o jogo em ~1 minuto |
 
 ## Estrutura
 ```
-index.html            telas (título, opções, nome, créditos, mapa, batalha)
-css/base.css          variáveis, reset, troca de telas, toast
-css/menu.css          título, menus, HUD e mapa
-css/battle.css        tela de batalha (moldura, CRT, terminal, teclado)
-js/core.js            estado, save (localStorage), nome do jogador (cleanName), Game.show(), Game.toast()
-js/sprites.js         carrega os PNGs de assets/ (se faltar um, o mapa usa a arte provisória)
-js/engine/audio.js    sons 8-bit gerados por código (clique, golpe, erro, sucesso, corte, tique, alarme)
-js/data/levels.js     fases: mapa, teclado, chefe e desafios  <- EDITE AQUI para criar fases
-js/screens/map.js     mapa em canvas, toque → caminho (BFS), colisão
-js/screens/battle.js  tokens, validação, dano, fim de fase
-js/main.js            botões do menu, opções e tela de nome
-assets/               sprites/ tiles/ ui/ audio/  (arte e som)
-tools/make_sprites.py gera todos os PNGs de assets/ (arte em pixel art feita por código)
+index.html              todas as telas
+manifest.webmanifest    PWA (instalar como app)
+sw.js                   offline: lista de arquivos em cache (aumente VERSAO ao mudar algo)
+css/                    fonts, base, menu, battle, dialogue, tutorial, report
+js/core.js              estado, save, Game.show(), Game.toast()
+js/lang/algo.js         >>> mini-linguagem: tokens, gramática, parser, interpretador, tradutor, validador (sem HTML)
+js/metrics/logger.js    registro de eventos reais (localStorage) + CSV
+js/data/levels.js       fases e desafios  <- EDITE AQUI
+js/data/dialogues.js    falas do Mentor
+js/screens/map.js       mapa top-down (toque para andar)
+js/screens/battle.js    batalha
+js/screens/report.js    relatório / mapa de habilidades
+js/screens/bench.js     teste de digitação
+js/engine/audio.js      sons 8-bit por código
+js/engine/effects.js    tremor, flash, dano flutuante, cortes
+js/tutorial.js          tutorial guiado
+js/main.js              menu, opções, Modo Banca, PWA
+tests/                  testes da linguagem (navegador e Node)
+assets/                 sprites, tiles, fontes (OFL), ícones
+tools/                  geradores da pixel art (Python + Pillow); make_avatars.py gera as cores de jaqueta
 ```
-
-## O que precisamos (checklist)
-- [x] Arte da batalha: `player.png` (96×128), `boss1.png` e `boss2.png` (128×128), fundo transparente
-- [x] Arte do mapa: `hero-map.png` (16×16, 4 direções × 4 quadros), `boss1-map.png`/`boss2-map.png` (2 quadros) e `tiles/tileset.png` (chão ×3, parede, terminal)
-- [ ] Logo e fundo da tela inicial (`assets/ui/`)
-- [ ] Sons: música do menu/batalha, clique de tecla, acerto, erro (`assets/audio/`)
-- [ ] Hospedagem com HTTPS (GitHub Pages, Netlify ou Vercel) — o link vai na ficha do evento
-- [ ] Testar em 2 celulares + 1 tablet (Chrome Android e Safari iOS)
-
-Direitos de uso: o edital (item 26) deixa o participante responsável pelos direitos do conteúdo.
-Use arte própria ou com licença que permita uso (Kenney.nl, OpenGameArt, itch.io — leia a licença de cada pacote).
-Para desenhar: Piskel, LibreSprite ou Aseprite.
 
 ## Rodar e testar
-- Computador: dê dois cliques no `index.html`.
-- Celular na mesma rede Wi-Fi: `npx serve .` e abra `http://IP-DO-PC:3000`.
-- Link público: arraste a pasta no Netlify Drop ou publique no GitHub Pages.
+- **Computador:** duplo clique no `index.html` (offline/PWA só funciona via http/https).
+- **Celular na mesma rede:** `npx serve .` (ou `python3 -m http.server`) e abra `http://IP-DO-PC:3000`.
+- **Link público (recomendado para a banca):** GitHub Pages ou Netlify Drop. Abra o link **uma vez com internet** em cada celular: depois funciona em modo avião. Use "⬇ INSTALAR APP" no menu.
+- **Testes:** `node tests/lang.test.js` ou abra `tests/tests.html`.
 
-## Roadmap
-**Pronto neste protótipo**
-- [x] Tela inicial (Jogar / Opções / Créditos), progresso salvo
-- [x] Mapa com toque para andar, colisão e inimigo que inicia a batalha
-- [x] Batalha no layout da referência (só número da fase, sem hora/bateria)
-- [x] 2 fases com 2 desafios cada, dano, derrota e vitória
+## Como criar um desafio (5 passos)
+1. Abra `js/data/levels.js` e copie um item de `challenges`.
+2. Escreva a missão em `intent` (as palavras que são blocos ficam coloridas sozinhas).
+3. Coloque UMA resposta certa em `solucao`.
+4. Em `testes`, coloque o cenário da batalha (1º) e pelo menos um cenário em que a condição dá **falso** (impede chute).
+5. Se usar `while`, diga em `efeitos` o que a ação muda (ex.: `{ analyze: { hp: -1 } }`), senão é laço infinito. Rode `node tests/lang.test.js`.
 
-**Próximos passos (nesta ordem)**
-1. [x] Carregar sprites reais (batalha e mapa) com fallback para a arte provisória
-2. [ ] Mapas maiores com câmera que segue o jogador
-3. [ ] NPC com diálogo curto que explica o conceito da fase (if, while)
-4. [ ] Mais fases e desafios (laços, variáveis, operadores)
-5. [ ] Sons e música
-6. [ ] Modo offline (PWA: manifest + service worker), porque o Wi-Fi de evento costuma falhar
-7. [ ] Tela de vitória/fim e tela de tutorial
+## Checklist da bancada (22/10)
+- [ ] Link publicado e aberto 1× com internet em **2 celulares** + notebook de reserva (todos carregados, carregador e extensão).
+- [ ] Testar em **modo avião** antes de sair.
+- [ ] Ligar o **Modo Banca** (`?banca=1`) e tocar em **REINICIAR DEMO** antes de cada jurado.
+- [ ] Rodar o **Teste de Digitação** com colegas em 21/10 e levar o **Relatório** com o *n* real (exportar CSV).
+- [ ] Roteiro de 15 min: problema (2) · jurado joga (5) · como funciona por dentro (3) · impacto e próximos passos (2) · perguntas (3).
 
-## Ficha do evento (Vitrine Games MT, Anexo II)
-Nome do game: Algoritmia · Gênero: RPG tático educacional · Plataforma: Web (celular/tablet) ·
-Estágio: protótipo jogável · Vínculo com MT: Senai Porto, Cuiabá · Link/demo: URL da hospedagem.
-
-## Nome do jogador
-Na 1ª vez que toca em JOGAR, o jogo pede o nome (máx. 18 caracteres, definido em `Game.NAME_MAX` no `core.js` e no `maxlength` do `index.html`).
-Fica salvo no aparelho e aparece na barra de vida da batalha. Para trocar: OPÇÕES → NOME. "Zerar progresso" não apaga o nome.
-O texto é limpo em `Game.cleanName` (tira caracteres invisíveis, junta espaços repetidos, corta em 18).
-
-## Sprites
-Todos os PNGs são pixel art original, gerados por `tools/make_sprites.py` (precisa de `pip install pillow`):
-```
-python3 tools/make_sprites.py
-```
-Para editar o desenho, mexa em `tools/art_player.py` (herói da batalha), `tools/art_bosses.py` (chefes e ícones do mapa) ou
-`tools/art_map.py` (herói do mapa e tiles) ou `tools/art_fx.py` (cortes) e rode o comando de novo. Para usar arte de outra pessoa, é só substituir os PNGs em `assets/`
-mantendo o tamanho e a ordem dos quadros (descritos em `js/sprites.js`).
-Chefe novo: desenhe `bossN.png` e `bossN-map.png`, inclua em `js/sprites.js` e coloque `sprite: 'bossN'` na fase em `levels.js`.
-
-## Fase de chefão (com tempo limite)
-A fase 3 (`ROOT-DAEMON`) tem `timer: 25` em `js/data/levels.js`: cada desafio tem esse tempo (ou o `time` do próprio desafio).
-Se a barra de tempo acabar, o chefe ataca (-25 de vida, 3 cortes) e o desafio recomeça. Errar o comando também faz o chefe revidar (-15, 2 cortes).
-Para fazer outro chefão: copie a fase 3, mude `boss` (nome, `sprite`, `hp`, `big: true` deixa o sprite maior) e os `challenges`.
-Fases sem `timer` (1 e 2) funcionam como antes. O relógio pausa com o tutorial aberto e para ao sair da batalha.
-
-## Efeitos e cortes (estilo Undertale)
-`js/screens/battle.js` chama `triggerImpact()` (tremor + flash), `spawnDamageText()` (número flutuante) e `spawnSlash()` (corte).
-Os cortes são folhas de 8 quadros (`assets/sprites/slash-hero.png` e `slash-boss.png`) tocadas por CSS (`.slash` em `css/battle.css`).
-Para mudar o desenho do corte: `tools/art_fx.py` e rode `python3 tools/make_sprites.py`.
-
-## Tutorial
-`js/tutorial.js` mostra balões guiados na 1ª vez de cada tela (título, mapa, batalha). Para trocar textos, edite o objeto `T`. O botão "COMO JOGAR" (título) e "? AJUDA" (mapa/batalha) repetem o tutorial.
+## Direitos de uso
+Pixel art e sons originais, gerados por código (`tools/`, `js/engine/audio.js`). Fontes Rajdhani e JetBrains Mono sob SIL Open Font License (`assets/fonts/OFL-*.txt`).

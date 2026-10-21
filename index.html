@@ -1,60 +1,106 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0d14">
+<meta name="description" content="Algoritmia: RPG tático para aprender lógica de programação no celular, montando código com blocos.">
 <title>Algoritmia — Cyber RPG Tático</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/menu.css">
 <link rel="stylesheet" href="css/battle.css">
 <link rel="stylesheet" href="css/dialogue.css">
 <link rel="stylesheet" href="css/tutorial.css">
+<link rel="stylesheet" href="css/report.css">
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="css/training.css">
 </head><body>
 <main id="app">
+  <!-- ===================== TÍTULO ===================== -->
   <section id="screen-title" class="screen active">
-    <h1 class="logo">ALGORITMIA<small>cyber RPG tático</small></h1>
-    <nav class="menu">
-      <button class="pri" data-go="map">JOGAR</button>
-      <button id="btn-how">COMO JOGAR</button>
-      <button data-go="options">OPÇÕES</button>
-      <button data-go="credits">CRÉDITOS</button>
+    <canvas class="city" aria-hidden="true"></canvas>
+    <div class="grid-wrap" aria-hidden="true"><div class="grid-bg"></div></div>
+    <div class="banca-tag" id="banca-tag" hidden>MODO BANCA</div>
+    <h1 class="logo" id="logo">ALGORITMIA<small>cyber RPG tático</small></h1>
+    <p class="tagline">Aprenda lógica de programação <b>montando código com blocos</b>. Sem digitar.</p>
+    <nav class="menu" aria-label="Menu principal">
+      <button type="button" class="pri" data-go="map">▶ JOGAR</button>
+      <button type="button" id="btn-levels" hidden>ESCOLHER FASE</button>
+      <button type="button" id="btn-how">COMO JOGAR</button>
+      <button type="button" id="btn-report">RELATÓRIO</button>
+      <button type="button" data-go="options">OPÇÕES</button>
+      <button type="button" data-go="credits">CRÉDITOS</button>
+      <button type="button" id="btn-install" hidden>⬇ INSTALAR APP</button>
+      <button type="button" id="btn-demo-reset" class="warn" hidden>↺ REINICIAR DEMO</button>
     </nav>
+  </section>
+
+  <!-- ===================== ESCOLHER FASE (Modo Banca) ===================== -->
+  <section id="screen-levels" class="screen">
+    <h2 class="logo sm">FASES</h2>
+    <nav class="menu" aria-label="Lista de fases" id="level-list"></nav>
+    <nav class="menu" aria-label="Voltar das fases"><button type="button" data-go="title">VOLTAR</button></nav>
   </section>
 
   <section id="screen-options" class="screen">
     <h2 class="logo sm">OPÇÕES</h2>
-    <nav class="menu">
-      <button id="opt-name">NOME: ---</button>
-      <button id="opt-sound">SOM: LIGADO</button>
-      <button id="opt-reset">ZERAR PROGRESSO</button>
-      <button data-go="title">VOLTAR</button>
+    <nav class="menu" aria-label="Opções do jogo">
+      <button type="button" id="opt-name">NOME: ---</button>
+      <button type="button" id="opt-sound">SOM: LIGADO</button>
+      <button type="button" id="opt-vibra">VIBRAÇÃO: LIGADA</button>
+      <button type="button" id="opt-calmo">MODO ACOLHIMENTO: DESLIGADO</button>
+      <button type="button" id="opt-lite">EFEITOS LEVES: DESLIGADO</button>
+      <button type="button" id="opt-reset">ZERAR PROGRESSO</button>
+      <button type="button" data-go="title">VOLTAR</button>
     </nav>
+    <p class="txt small">Modo Acolhimento: sem cronômetro e com metade do dano. Efeitos leves: menos animação para celulares mais simples.</p>
   </section>
 
+  <!-- ===================== ACESSO (login por codinome) ===================== -->
   <section id="screen-name" class="screen">
-    <h2 class="logo sm">SEU NOME</h2>
-    <p class="txt">Como você quer ser chamado?<br>Até 18 caracteres.</p>
-    <div class="namebox">
-      <input id="name-input" type="text" maxlength="18" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Digite seu nome" aria-label="Seu nome">
-      <small id="name-count">0/18</small>
+    <canvas class="city" aria-hidden="true"></canvas>
+    <div class="scan" aria-hidden="true"></div>
+    <div class="login">
+      <pre class="boot" id="boot" aria-hidden="true"></pre>
+      <div class="lcard" id="lcard">
+        <div class="lhead"><i class="led"></i><i class="led y"></i><i class="led g"></i><span>NEO-CUIABÁ // NET</span><b>v2.6</b></div>
+        <h2 class="ltitle" data-text="ACESSO AO SISTEMA">ACESSO AO SISTEMA</h2>
+        <label class="llab" for="name-input">CODINOME DO HACKER</label>
+        <div class="namebox">
+          <span class="nprompt" aria-hidden="true">&gt;_</span>
+          <input id="name-input" type="text" maxlength="18" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="go" placeholder="ex.: Kenzo">
+          <small id="name-count">0/18</small>
+        </div>
+        <p class="lerr" id="name-err" role="alert" hidden></p>
+        <span class="llab" id="av-lab">ESCOLHA SEU VISUAL</span>
+        <div class="avatars" id="avatars" role="radiogroup" aria-labelledby="av-lab"></div>
+        <nav class="menu wide" aria-label="Acesso">
+          <button type="button" class="pri" id="name-ok">CONECTAR ▶</button>
+          <button type="button" id="name-back">VOLTAR</button>
+        </nav>
+      </div>
     </div>
-    <nav class="menu">
-      <button class="pri" id="name-ok">CONFIRMAR</button>
-      <button id="name-back">VOLTAR</button>
-    </nav>
+    <div class="granted" id="granted" hidden>
+      <b class="gt" data-text="ACESSO CONCEDIDO">ACESSO CONCEDIDO</b>
+      <pre class="glog" id="glog"></pre>
+      <div class="gbar"><u id="gbar"></u></div>
+    </div>
   </section>
 
   <section id="screen-credits" class="screen">
     <h2 class="logo sm">CRÉDITOS</h2>
-    <p class="txt">Rafael Reis · Kenzo Camacho<br>Senai Porto — Cuiabá, MT</p>
-    <nav class="menu"><button data-go="title">VOLTAR</button></nav>
+    <p class="txt">Equipe TRACER TECH<br>Kenzo Raul Pimenta Camacho · Rafael Filipe Vieira Reis<br>Senai Porto — Cuiabá, MT</p>
+    <p class="txt small">Arte em pixel art e sons 8-bit originais, gerados por código.</p>
+    <nav class="menu" aria-label="Voltar dos créditos"><button type="button" data-go="title">VOLTAR</button></nav>
   </section>
 
+  <!-- ===================== MAPA ===================== -->
   <section id="screen-map" class="screen">
-    <header class="hud"><span id="map-phase">FASE 1</span><span class="hbtn"><button class="mini" data-help>? AJUDA</button><button data-go="title" class="mini">‹ MENU</button></span></header>
+    <header class="hud"><span id="map-phase">FASE 1</span><span class="hbtn"><button type="button" class="mini" data-help>? AJUDA</button><button type="button" data-go="title" class="mini">‹ MENU</button></span></header>
     <div class="mapwrap"><canvas id="map-canvas"></canvas></div>
-    <p class="hint">Toque no mapa (ou use as setas/WASD) para mover. Chegue até o inimigo para lutar. Toque no Mentor para conversar.</p>
+    <p class="hint">Toque no chão para andar até o <b class="t-a">inimigo rosa</b>. Toque no <b class="t-o">Mentor</b> para aprender o conceito da fase.</p>
     <div id="dialogue" role="dialog" aria-label="Conversa com o Mentor">
       <div class="dlg-box">
         <div class="dlg-avatar" aria-hidden="true"></div>
@@ -64,38 +110,95 @@
     </div>
   </section>
 
+  <!-- ===================== BATALHA ===================== -->
   <section id="screen-battle" class="screen">
     <div class="device">
-      <div class="bar-phase"><span>FASE <span id="b-phase">1</span></span><div class="timer" id="timer" hidden><u id="timer-bar"></u><i id="timer-txt"></i></div><span class="hbtn"><button class="mini" data-help>? AJUDA</button><button class="mini" id="b-exit">‹ MAPA</button></span></div>
+      <div class="bar-phase"><span>FASE <span id="b-phase">1</span></span><div class="timer" id="timer" hidden><u id="timer-bar"></u><i id="timer-txt"></i></div><span class="hbtn"><button type="button" class="mini" data-help>? AJUDA</button><button type="button" class="mini" id="b-exit">‹ MAPA</button></span></div>
       <div class="col-l">
         <div class="crt">
           <div class="hp hp-player"><b class="pname" id="player-name"></b><i id="php"></i><div class="bar"><u id="php-bar"></u></div><small>Rank Data Scout</small></div>
           <div class="hp hp-boss"><b id="boss-name"></b><i id="bhp"></i><div class="bar"><u id="bhp-bar"></u></div><small id="boss-lvl"></small></div>
+          <div class="bubble" id="bubble" aria-live="polite"></div>
           <div class="stage"><div class="spr player" id="player-spr" role="img" aria-label="Seu personagem"></div><div class="spr boss" id="boss-spr" role="img"></div></div>
         </div>
-        <div class="term" id="term"><div class="intent" id="intent"></div><div class="tip" id="tip" hidden></div><div id="code"></div></div>
+        <div class="term" id="term">
+          <div class="mission" id="mission"></div>
+          <div class="vars" id="vars" role="group" aria-label="Valores das variáveis"></div>
+          <div class="code" id="code" aria-live="polite"></div>
+          <div class="feedback" id="feedback" hidden aria-live="polite"></div>
+          <div class="transbox" id="transbox">
+            <div class="tabs" id="tabs" role="tablist"><button type="button" data-l="pt">PORTUGUÊS</button><button type="button" data-l="py">PYTHON</button><button type="button" data-l="js">JAVASCRIPT</button></div>
+            <pre id="trans"></pre>
+          </div>
+        </div>
       </div>
       <div class="col-r">
         <div class="keys" id="keys"></div>
-        <button class="exec" id="exec">EXECUTE SCRIPT</button>
+        <div class="actrow">
+          <button type="button" class="aux" id="undo" aria-label="Apagar o último bloco">⌫ APAGAR</button>
+          <button type="button" class="aux" id="hint">💡 DICA</button>
+          <button type="button" class="exec" id="exec">▶ EXECUTAR</button>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- ===================== RESULTADO DA LUTA ===================== -->
+  <section id="screen-result" class="screen">
+    <h2 class="logo sm" id="res-title">MISSÃO CUMPRIDA</h2>
+    <div class="stars" id="res-stars"></div>
+    <div class="res-stats" id="res-stats"></div>
+    <div class="res-code" id="res-code"></div>
+    <nav class="menu" aria-label="Depois da luta"><button type="button" class="pri" id="res-next">CONTINUAR</button><button type="button" id="res-map">VOLTAR AO MAPA</button></nav>
+  </section>
+
+  <!-- ===================== RELATÓRIO (métricas reais) ===================== -->
+  <section id="screen-report" class="screen scroll">
+    <header class="hud"><span>RELATÓRIO</span><span class="hbtn"><button type="button" class="mini" id="rep-back">‹ VOLTAR</button></span></header>
+    <div class="rep-wrap">
+      <div class="seg" id="rep-scope"><button type="button" data-s="sessao" class="on">ESTA SESSÃO</button><button type="button" data-s="tudo">TUDO NESTE APARELHO</button></div>
+      <div id="rep-body"></div>
+      <h3 class="rep-h">Pesquisa: teclado do celular × blocos</h3>
+      <div id="bench-summary"></div>
+      <nav class="menu wide" aria-label="Ações do relatório">
+        <button type="button" class="pri" id="btn-bench">⌨ FAZER TESTE DE DIGITAÇÃO</button>
+        <button type="button" id="rep-csv">⬇ EXPORTAR CSV (JOGO)</button>
+        <button type="button" id="bench-csv">⬇ EXPORTAR CSV (TESTE)</button>
+        <button type="button" id="rep-clear" class="warn">APAGAR DADOS</button>
+      </nav>
+      <p class="txt small">Todos os números desta tela são calculados a partir do que foi realmente jogado neste aparelho. Nada é estimado.</p>
+    </div>
+  </section>
+
+  <!-- ===================== TESTE DE DIGITAÇÃO (benchmark) ===================== -->
+  <section id="screen-bench" class="screen scroll">
+    <header class="hud"><span>TESTE DE DIGITAÇÃO</span><span class="hbtn"><button type="button" class="mini" id="bench-quit">‹ SAIR</button></span></header>
+    <div class="bench" id="bench"></div>
+  </section>
+
   <div id="toast"></div>
   <div id="coach"><div class="spot"></div>
     <div class="card"><div class="txt"></div>
-      <div class="row"><span class="step"></span><span><button class="skip">Pular tutorial</button> <button class="next">Próximo</button></span></div>
+      <div class="row"><span class="step"></span><span><button type="button" class="skip">Pular tutorial</button> <button type="button" class="next">Próximo</button></span></div>
     </div>
   </div>
 </main>
 <script src="js/core.js"></script>
+<script src="js/lang/algo.js"></script>
+<script src="js/metrics/logger.js"></script>
 <script src="js/sprites.js"></script>
 <script src="js/data/levels.js"></script>
 <script src="js/screens/map.js"></script>
 <script src="js/engine/audio.js"></script>
+<script src="js/engine/effects.js"></script>
 <script src="js/data/dialogues.js"></script>
 <script src="js/components/dialogue.js"></script>
 <script src="js/screens/battle.js"></script>
+<script src="js/ui/city.js"></script>
+<script src="js/ui/charts.js"></script>
+<script src="js/screens/report.js"></script>
+<script src="js/screens/bench.js"></script>
 <script src="js/tutorial.js"></script>
+<script src="js/screens/training.js"></script>
 <script src="js/main.js"></script>
 </body></html>

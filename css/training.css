@@ -1,0 +1,51 @@
+/* ==========================================================================
+   TREINAMENTO ANIMADO (js/screens/training.js) — legenda, destaque e "mão" que toca nos blocos
+   ========================================================================== */
+#trn{position:absolute;top:0;right:0;bottom:0;left:0;z-index:45;pointer-events:none}
+#trn[hidden]{display:none}
+#trn.dim::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:#05060acc}
+.trn-block{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:auto} /* na demonstração, os toques do jogador não mexem na luta */
+.trn-block[hidden]{display:none}
+.trn-spot{position:absolute;display:none;border:2px solid var(--ye);border-radius:12px;box-shadow:0 0 0 9999px #05060a99,0 0 18px var(--ye);transition:all .35s ease;pointer-events:none}
+#trn:not(.demo) .trn-spot{box-shadow:0 0 18px var(--ye)}
+
+/* legenda */
+.trn-card{position:absolute;left:50%;width:min(94%,460px);max-height:calc(100% - 12px);overflow-y:auto;transform:translateX(-50%);padding:12px 14px;border:2px solid var(--ye);border-radius:14px;background:#0b0d14f5;color:#e8f6ff;box-shadow:0 0 24px #ffe66d44;pointer-events:auto;font:600 16px/1.45 var(--fd)}
+.trn-card.mid{top:50%;transform:translate(-50%,-50%)}
+.trn-card.in{animation:trnIn .28s ease-out}
+@keyframes trnIn{from{opacity:0;margin-top:8px}}
+.trn-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;font:700 11px var(--fm);letter-spacing:.06em}
+.trn-tag{color:var(--ye)}.trn-step{color:#8aa0c0}
+.trn-txt b{color:var(--ye)}.trn-txt b[class^="t-"]{font-family:var(--fm);font-size:.92em}
+.trn-txt .t-k{color:var(--cy)}.trn-txt .t-o{color:var(--pu)}.trn-txt .t-v{color:var(--gr)}.trn-txt .t-a{color:var(--pk)}.trn-txt .t-gr{color:var(--gr)}.trn-txt .t-rd{color:var(--rd)}
+.trn-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.trn-row:empty{display:none}
+.trn-row button{flex:1 1 auto;min-height:40px;padding:6px 10px;border:2px solid var(--cy);border-radius:8px;background:#0d1426;color:var(--cy);font:700 13px var(--fd);letter-spacing:.08em}
+.trn-row button.pri{background:var(--ye);border-color:var(--ye);color:#10131a}
+.trn-row button.ghost{border-color:#5b6573;color:#c8d4e6}
+.trn-row button:active{transform:scale(.97)}
+
+/* frase da missão quebrada em blocos (aparecem um a um) */
+.trn-map{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:6px;font:500 13px var(--fm)}
+.trn-map span{padding:2px 6px;border:1px solid #2a3350;border-radius:6px;background:#0d1426}
+.trn-map span{opacity:0;animation:trnMap .35s ease-out forwards}
+.trn-map i{font-style:normal;color:#c8d4e6}
+@keyframes trnMap{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.trn-code{margin:8px 0 0;padding:9px;border:1px solid #2a3350;border-radius:8px;background:#05070c;font:500 14px/1.5 var(--fm);white-space:pre-wrap}
+.trn-code .t-k{color:var(--cy)}.trn-code .t-o{color:var(--pu)}.trn-code .t-v{color:var(--gr)}.trn-code .t-a{color:var(--pk)}
+
+/* mão que toca */
+.trn-hand{position:absolute;left:0;top:0;width:40px;height:40px;transition:transform .55s cubic-bezier(.3,.7,.3,1);filter:drop-shadow(0 3px 6px #000c);pointer-events:none;z-index:2}
+.trn-hand[hidden]{display:none}
+.trn-hand svg{position:relative;display:block}
+.trn-ripple{position:absolute;left:3px;top:-3px;width:20px;height:20px;border:2px solid var(--ye);border-radius:50%;opacity:0}
+.trn-hand.tap svg{animation:trnTap .25s ease-out}
+.trn-hand.tap .trn-ripple{animation:trnRip .45s ease-out}
+@keyframes trnTap{50%{transform:scale(.82) translateY(2px)}}
+@keyframes trnRip{from{opacity:1;transform:scale(.4)}to{opacity:0;transform:scale(2.2)}}
+
+/* na batalha em modo treino: some o "? AJUDA" (o treino já explica) */
+#screen-battle.treino [data-help]{display:none}
+@media (max-width:350px){.trn-card{font-size:14.5px;padding:10px 12px}.trn-row button{font-size:12px;padding:5px 8px}}
+@media (orientation:landscape) and (max-height:560px){.trn-card{font-size:14px;width:min(60%,440px);padding:9px 12px}.trn-map{font-size:12px;gap:1px}.trn-row{margin-top:6px}.trn-row button{min-height:34px}}
+@media (prefers-reduced-motion:reduce){.trn-hand{transition:none}}

@@ -8,19 +8,19 @@
   const T = {
     title: [
       { t: 'Bem-vindo ao <b>ALGORITMIA</b>! 👋 Aqui você aprende a pensar como um programador <b>jogando</b>. Em vez de digitar código, você monta o comando <b>tocando em botões</b>.' },
-      { el: '.menu .pri', t: 'Toque em <b>JOGAR</b> para começar. Se esquecer algo, use o botão <b>? AJUDA</b> no topo de cada tela.' } ],
+      { el: '.menu .pri', t: 'Toque em <b>JOGAR</b> para começar: na 1ª vez tem um <b>treino animado</b> de 1 minuto. Ele também fica em <b>COMO JOGAR</b>.' } ],
     map: [
       { el: () => G.map.rect('me'), t: 'Este é <b>você</b>: o personagem de jaqueta amarela e calça preta.' },
       { el: '#map-canvas', t: 'Toque em qualquer ponto do <b>chão escuro</b> e ele anda até lá. As paredes azuis bloqueiam o caminho. (No computador, use as setas do teclado.)' },
       { el: () => G.map.rect('enemy'), t: 'Seu objetivo é chegar neste <b>inimigo</b>, que brilha em rosa. Quando você encostar nele, começa a batalha.' } ],
     battle: [
-      { t: 'Hora da batalha! ⚔️ Para vencer, você precisa montar o <b>comando certo</b> usando botões. Não precisa digitar nada. Vou te mostrar como.' },
-      { el: '.crt', t: 'Aqui em cima está a luta. À esquerda, a <b>sua vida</b> (com o seu nome). À direita, a <b>vida do inimigo</b>. Zere a vida dele para vencer.' },
-      { el: '#term', t: 'O inimigo avisa o que vai fazer na linha cinza que começa com <b>//</b>. Essa frase é a <b>sua missão</b>: leia com calma.' },
-      { el: '#keys', t: 'Estes botões formam o código. Toque neles <b>na ordem da frase</b>. Exemplo: "Se A for igual a B, faça C" vira <b>if → A → == → B → C</b>. Cores: ciano é decisão, roxo é comparação, verde são os nomes e rosa é a ação.' },
-      { el: '#term', t: 'O que você tocar aparece aqui. Errou um botão? <b>Toque no terminal</b> para apagar o último.' },
-      { el: '#exec', t: 'Com o comando pronto, toque em <b>EXECUTE SCRIPT</b>. Se acertar, o inimigo perde vida. Se errar, você perde um pouco.' },
-      { t: 'Está difícil? Calma! Quando a sua vida ficar <b>abaixo da metade</b>, aparece uma <b>dica amarela</b> para te ajudar. Boa sorte! 🎮' } ]
+      { t: 'Hora da batalha! ⚔️ Você vence montando o <b>comando certo</b> com blocos. Não precisa digitar nada.' },
+      { el: '#mission', t: 'Esta é a <b>MISSÃO</b>. As palavras coloridas são os <b>blocos</b> que você vai usar, na mesma cor. Embaixo, os <b>valores</b> das variáveis agora.' },
+      { el: '#keys', t: 'Toque nos blocos <b>na ordem da frase</b>. Só ficam <b>acesos</b> os blocos que podem vir agora: assim é impossível errar a escrita do código.' },
+      { el: '#code', t: 'Os <b>espaços tracejados</b> mostram o que ainda falta. Tocou errado? <b>Toque no bloco</b> aqui para apagar a partir dele, ou use ⌫ APAGAR.' },
+      { el: '#transbox', t: 'Aqui o seu código é lido em <b>português</b>. Toque em <b>PYTHON</b> ou <b>JAVASCRIPT</b> para ver o mesmo código nas linguagens do mercado.' },
+      { el: '#hint', t: 'Travou? A <b>💡 DICA</b> tem 3 níveis. No último, o bloco certo fica piscando.' },
+      { el: '#exec', t: 'Pronto? Toque em <b>▶ EXECUTAR</b>. Você vê o código rodando passo a passo. Acertou: o inimigo leva dano. Errou: o jogo explica o porquê.' } ]
   };
 
   T.timer = [
@@ -33,6 +33,7 @@
     txt.innerHTML = s.t; stp.textContent = (i + 1) + ' de ' + list.length; nxt.textContent = i === list.length - 1 ? 'Entendi!' : 'Próximo';
     co.classList.add('on');
     let r = null;
+    if (s.el && typeof s.el !== 'function') { const e = $(s.el); if (e) e.scrollIntoView({ block: 'nearest' }); } // garante que o item destacado está visível (terminal rolado, tela deitada)
     if (s.el) { const q = typeof s.el === 'function' ? s.el() : $(s.el).getBoundingClientRect(); r = { left: q.left, top: q.top, width: q.width, height: q.height }; }
     if (r) {
       const pad = 6; spot.style.display = 'block'; co.classList.remove('dim');
@@ -51,7 +52,6 @@
   G.tutorialRun = run; // usado pelo chefão (battle.js)
   G.onShow = n => { if (T[n] && !G.state.seen[n]) setTimeout(() => { if (G.current === n) run(n); }, 350); };
   document.addEventListener('click', e => {
-    if (e.target.closest('#btn-how')) { G.state.seen = {}; G.save(); run('title'); }
-    else if (e.target.closest('[data-help]')) run(G.current);
+    if (e.target.closest('[data-help]')) run(G.current); // (COMO JOGAR agora abre o treinamento animado: js/screens/training.js)
   });
 })(Game);

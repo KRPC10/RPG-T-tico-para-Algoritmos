@@ -12,7 +12,10 @@
     boss2: 'assets/sprites/boss2.png',
     boss3: 'assets/sprites/boss3.png',
     'slash-hero': 'assets/sprites/slash-hero.png',  // 768x96: 8 quadros de corte (só pré-carrega; o CSS anima)
-    'slash-boss': 'assets/sprites/slash-boss.png'
+    'slash-boss': 'assets/sprites/slash-boss.png',
+    // avatares (cor da jaqueta) escolhidos na tela de acesso
+    'hero-1': 'assets/sprites/hero-map-1.png', 'hero-2': 'assets/sprites/hero-map-2.png', 'hero-3': 'assets/sprites/hero-map-3.png',
+    'player-1': 'assets/sprites/player-1.png', 'player-2': 'assets/sprites/player-2.png', 'player-3': 'assets/sprites/player-3.png'
   };
   G.sprites = {};
   Object.keys(F).forEach(k => { const im = new Image(); im.src = F[k]; G.sprites[k] = im; });
